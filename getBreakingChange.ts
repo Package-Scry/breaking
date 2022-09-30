@@ -1,10 +1,10 @@
 import { marked } from "marked"
+import { REG_X_HEADER } from "./constants"
 import { isTheSameHeader } from "./utils"
 
 export const getBreakingChange = (changeLog: string): string | null => {
-  const regXHeader = /#{1,6}.+/g
-  const headers: string[] = changeLog.match(regXHeader) ?? [""]
-  const breakingChangeIndex = headers.findIndex((header) =>
+  const headers: string[] = changeLog.match(REG_X_HEADER) ?? [""]
+  const breakingChangeIndex = headers.findIndex(header =>
     header.toLocaleLowerCase().includes("breaking")
   )
 
@@ -15,7 +15,7 @@ export const getBreakingChange = (changeLog: string): string | null => {
   ).length
   const nextHeader = headers
     .slice(breakingChangeIndex + 1)
-    .find((header) => isTheSameHeader(header, headerCount))
+    .find(header => isTheSameHeader(header, headerCount))
   const isLastItem = !nextHeader
   const start = changeLog.search(headers[breakingChangeIndex])
   const end = isLastItem ? changeLog.length : changeLog.search(nextHeader)

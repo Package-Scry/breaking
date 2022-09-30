@@ -35,7 +35,7 @@ export const getChangeLogFromFile = async (
         const start = data.indexOf(header)
         const nextVersionHeader = data
           .slice(start + header.length)
-          .match(regXHeader)
+          .match(REG_X_HEADER)
           ?.find(header => isVersionHeader(header, headerCount))
         const end = !nextVersionHeader
           ? data.length

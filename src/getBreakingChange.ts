@@ -7,8 +7,9 @@ export const getBreakingChange = (changeLog: string): string | null => {
   const breakingChangeIndex = headers.findIndex(header =>
     header.toLocaleLowerCase().includes("breaking")
   )
+  const fallbackText = changeLog.replace(headers[0], "")
 
-  if (breakingChangeIndex === -1) return null
+  if (breakingChangeIndex === -1) return fallbackText
 
   const headerCount = (
     headers[breakingChangeIndex].match(new RegExp("#", "g")) || []
@@ -21,5 +22,5 @@ export const getBreakingChange = (changeLog: string): string | null => {
   const end = isLastItem ? changeLog.length : changeLog.search(nextHeader)
   const breakingText = changeLog.slice(start, end)
 
-  return breakingText ? marked.parse(breakingText) : null
+  return breakingText ? marked.parse(breakingText) : fallbackText
 }

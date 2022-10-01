@@ -1,4 +1,3 @@
-import semverRegex from "semver-regex"
 import { getChangeLogFromFile } from "./getChangeLogFromFile.js"
 import { getChangeLogFromGitHub } from "./getChangeLogFromGithub.js"
 import {
@@ -20,7 +19,7 @@ export const getChangeLog = async (npmPackage: {
 }) => {
   const { currentVersion: localVersion, name } = npmPackage
   try {
-    const majorVersion = getMajorVersion(localVersion)
+    const localMajorVersionNumber = getMajorVersion(localVersion)
 
     const { wasSuccessful, url } = await getGitHubRepoUrl(name)
 
@@ -31,55 +30,59 @@ export const getChangeLog = async (npmPackage: {
       "github.com",
       "api.github.com/repos"
     )
-    const latestMajorVersion = (await getLatestMajorVersion(gitHubUrl)) ?? 0
+    const { version: latestMajorVersionNumber } = await getLatestMajorVersion(
+      name
+    )
     const changeLogs = await getChangeLogFromGitHub(
       gitHubUrl,
-      majorVersion + 1,
-      latestMajorVersion
+      localMajorVersionNumber + 1,
+      latestMajorVersionNumber
     )
-    const localMajorVersionNumber = getMajorVersion(localVersion)
     const rawUrl = `${"https://github.com/zemirco/json2csv".replace(
       "github.com",
       "raw.githubusercontent.com"
     )}/master/CHANGELOG.md`
 
     const hasMissingChangeLog = changeLogs?.some(
-      ({ changes: { breaking } }) => !!breaking
+      ({ changes: { breaking } }) => !breaking
     )
-    const missingChangeLogs = hasMissingChangeLog
+    const fileChangeLogs = hasMissingChangeLog
       ? await getChangeLogFromFile(
           rawUrl,
           localMajorVersionNumber,
-          latestMajorVersion
+          latestMajorVersionNumber
         )
       : []
 
     console.log("changeLogs")
     console.log(changeLogs)
     console.log("-------missingChangeLogs-------")
-    console.log(missingChangeLogs)
+    console.log(fileChangeLogs)
 
-    const combinedChangeLogs = changeLogs.map(changeLog => {
-      if (!!changeLog.changes.breaking) return changeLog
+    const combinedChangeLogs = new Array(
+      latestMajorVersionNumber - localMajorVersionNumber
+    )
+      .fill("")
+      .map((_, i) => {
+        const versionToCheck = localMajorVersionNumber + i + 1
+        const releaseChangeLog = changeLogs.find(
+          ({ version }) => version === `${versionToCheck}.0.0`
+        )
+        const fileChangeLog = fileChangeLogs.find(
+          ({ version }) => version === `${versionToCheck}.0.0`
+        )
 
-      console.log("missing version: ", changeLog.version)
-      const version = semverRegex().exec(changeLog.version)?.[0]
-
-      const missingChangeLog = missingChangeLogs?.find(missingChangeLog => {
-        const missingVersion = semverRegex().exec(missingChangeLog.version)?.[0]
-
-        console.log(version, " vs ", missingVersion)
-        return missingVersion === version
+        return {
+          ...releaseChangeLog,
+          changes: {
+            breaking:
+              releaseChangeLog?.changes.breaking ??
+              fileChangeLog?.changes.breaking,
+          },
+        }
       })
 
-      return {
-        ...changeLog,
-        changes: {
-          breaking: missingChangeLog?.changes?.breaking,
-        },
-      }
-    })
-
+    console.log("FINAL")
     console.log(combinedChangeLogs)
   } catch (error) {
     console.log(error)

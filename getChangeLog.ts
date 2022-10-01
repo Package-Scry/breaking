@@ -53,7 +53,12 @@ export const getChangeLog = async (npmPackage: {
         )
       : []
 
-    const combinedChangeLogs = changeLogs.map((changeLog) => {
+    console.log("changeLogs")
+    console.log(changeLogs)
+    console.log("-------missingChangeLogs-------")
+    console.log(missingChangeLogs)
+
+    const combinedChangeLogs = changeLogs.map(changeLog => {
       if (!!changeLog.changes.breaking) return changeLog
 
       // const version = semverRegex().exec(changeLog.version)

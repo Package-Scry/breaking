@@ -42,8 +42,8 @@ export const getChangeLog = async (npmPackage: {
       "raw.githubusercontent.com"
     )}/master/CHANGELOG.md`
 
-    const hasMissingChangeLog = changeLogs?.filter(
-      ({ changes: { breaking } }, version) => !!breaking
+    const hasMissingChangeLog = changeLogs?.some(
+      ({ changes: { breaking } }) => !!breaking
     )
     const missingChangeLogs = hasMissingChangeLog
       ? await getChangeLogFromFile(

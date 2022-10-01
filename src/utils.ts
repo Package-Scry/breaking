@@ -1,6 +1,5 @@
 import semverRegex from "semver-regex"
 import util from "util"
-import fetch from "node-fetch"
 import { exec } from "child_process"
 
 const pExec = util.promisify(exec)
@@ -8,17 +7,17 @@ const pExec = util.promisify(exec)
 export const getMajorVersion = (text: string): number =>
   parseInt(semverRegex().exec(text)?.[0].split(".")[0] ?? "", 10)
 
-export const getLatestMajorVersion = async (baseUrl: string) => {
-  const response = await fetch(`${baseUrl}/releases/latest`, {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  })
-  const data = (await response.json()) as { tag_name?: string } | undefined
-  const tag_name = data?.tag_name
+export const getLatestMajorVersion = async (name: string) => {
+  const { stdout, stderr } = await pExec(`yarn info  ${name} version --json`)
 
-  return tag_name ? getMajorVersion(tag_name) : null
+  if (stderr) {
+    console.log("---------")
+    console.log("error", stderr)
+  }
+
+  const version = getMajorVersion(JSON.parse(stdout)?.data) ?? 0
+
+  return { wasSuccessful: !!stdout, version }
 }
 
 export const isTheSameHeader = (header: string, headerCount: number) =>

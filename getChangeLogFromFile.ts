@@ -29,27 +29,29 @@ export const getChangeLogFromFile = async (
         getMajorVersion(header) > localVersion
     )
 
-    const changeLogs = versionHeaders
-      .filter(header => header.includes(".0.0"))
-      .map(header => {
-        const start = data.indexOf(header)
-        const nextVersionHeader = data
-          .slice(start + header.length)
-          .match(REG_X_HEADER)
-          ?.find(header => isVersionHeader(header, headerCount))
-        const end = !nextVersionHeader
-          ? data.length
-          : data.indexOf(nextVersionHeader)
+    const majorVersionHeaders = versionHeaders.filter(header =>
+      header.includes(".0.0")
+    )
 
-        return {
-          version: semverRegex().exec(header)?.[0] ?? header,
-          changes: {
-            breaking: getBreakingChange(data.slice(start, end)),
-          },
-        }
-      })
+    const majorChangeLogs = majorVersionHeaders.map(header => {
+      const start = data.indexOf(header)
+      const nextVersionHeader = data
+        .slice(start + header.length)
+        .match(REG_X_HEADER)
+        ?.find(header => isVersionHeader(header, headerCount))
+      const end = !nextVersionHeader
+        ? data.length
+        : data.indexOf(nextVersionHeader)
 
-    return changeLogs
+      return {
+        version: semverRegex().exec(header)?.[0] ?? header,
+        changes: {
+          breaking: getBreakingChange(data.slice(start, end)),
+        },
+      }
+    })
+
+    return majorChangeLogs
   } catch (error) {
     console.error(error)
     return null

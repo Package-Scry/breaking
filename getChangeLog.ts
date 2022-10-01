@@ -1,3 +1,4 @@
+import semverRegex from "semver-regex"
 import { getChangeLogFromFile } from "./getChangeLogFromFile"
 import { getChangeLogFromGitHub } from "./getChangeLogFromGithub"
 import {
@@ -61,19 +62,21 @@ export const getChangeLog = async (npmPackage: {
     const combinedChangeLogs = changeLogs.map(changeLog => {
       if (!!changeLog.changes.breaking) return changeLog
 
-      // const version = semverRegex().exec(changeLog.version)
+      console.log("missing version: ", changeLog.version)
+      const version = semverRegex().exec(changeLog.version)?.[0]
 
-      // const missingChangeLog = missingChangeLogs.find((changeLog) => {
-      //   const missingVersion = semverRegex().exec(changeLog.version)
+      const missingChangeLog = missingChangeLogs?.find(missingChangeLog => {
+        const missingVersion = semverRegex().exec(missingChangeLog.version)?.[0]
 
-      //   return missingVersion === version
-      // })
+        console.log(version, " vs ", missingVersion)
+        return missingVersion === version
+      })
 
       return {
         ...changeLog,
-        // changes: {
-        //   breaking: missingChangeLog?.changes?.breaking,
-        // },
+        changes: {
+          breaking: missingChangeLog?.changes?.breaking,
+        },
       }
     })
   } catch (error) {

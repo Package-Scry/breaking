@@ -1,4 +1,4 @@
-import { getChangeLog } from "./getChangeLog"
+import { getChangeLog } from "./getChangeLog.js"
 
 export const getChangeLogs = async (
   packageNames: { name: string; currentVersion: string }[]

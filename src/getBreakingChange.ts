@@ -1,6 +1,6 @@
 import { marked } from "marked"
-import { REG_X_HEADER } from "./constants"
-import { isTheSameHeader } from "./utils"
+import { REG_X_HEADER } from "./constants.js"
+import { isTheSameHeader } from "./utils.js"
 
 export const getBreakingChange = (changeLog: string): string | null => {
   const headers: string[] = changeLog.match(REG_X_HEADER) ?? [""]

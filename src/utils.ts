@@ -1,5 +1,6 @@
 import semverRegex from "semver-regex"
 import util from "util"
+import fetch from "node-fetch"
 import { exec } from "child_process"
 
 const pExec = util.promisify(exec)

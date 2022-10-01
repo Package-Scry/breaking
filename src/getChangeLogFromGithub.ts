@@ -1,5 +1,6 @@
-import { getBreakingChange } from "./getBreakingChange"
-import { ChangeLog } from "./getChangeLog"
+import fetch from "node-fetch"
+import { getBreakingChange } from "./getBreakingChange.js"
+import { ChangeLog } from "./getChangeLog.js"
 
 type TSFixMe = any
 

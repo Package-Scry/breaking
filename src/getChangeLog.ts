@@ -1,11 +1,11 @@
 import semverRegex from "semver-regex"
-import { getChangeLogFromFile } from "./getChangeLogFromFile"
-import { getChangeLogFromGitHub } from "./getChangeLogFromGithub"
+import { getChangeLogFromFile } from "./getChangeLogFromFile.js"
+import { getChangeLogFromGitHub } from "./getChangeLogFromGithub.js"
 import {
   getMajorVersion,
   getGitHubRepoUrl,
   getLatestMajorVersion,
-} from "./utils"
+} from "./utils.js"
 
 export interface ChangeLog {
   version: string
@@ -79,6 +79,8 @@ export const getChangeLog = async (npmPackage: {
         },
       }
     })
+
+    console.log(combinedChangeLogs)
   } catch (error) {
     console.log(error)
   }

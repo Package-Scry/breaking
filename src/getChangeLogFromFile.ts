@@ -1,8 +1,9 @@
 import semverRegex from "semver-regex"
-import { REG_X_HEADER } from "./constants"
-import { getBreakingChange } from "./getBreakingChange"
-import { ChangeLog } from "./getChangeLog"
-import { isTheSameHeader, getMajorVersion } from "./utils"
+import fetch from "node-fetch"
+import { REG_X_HEADER } from "./constants.js"
+import { getBreakingChange } from "./getBreakingChange.js"
+import { ChangeLog } from "./getChangeLog.js"
+import { isTheSameHeader, getMajorVersion } from "./utils.js"
 
 export const getChangeLogFromFile = async (
   url: string,

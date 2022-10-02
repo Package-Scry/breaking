@@ -1,11 +1,11 @@
-import semverRegex from "semver-regex"
 import util from "util"
 import { exec } from "child_process"
+import findVersions from "find-versions"
 
 const pExec = util.promisify(exec)
 
 export const getMajorVersion = (text: string): number =>
-  parseInt(semverRegex().exec(text)?.[0].split(".")[0] ?? "", 10)
+  parseInt(findVersions(text, { loose: true })?.[0].split(".")[0] ?? "", 10)
 
 export const getLatestMajorVersion = async (name: string) => {
   const { stdout, stderr } = await pExec(`yarn info  ${name} version --json`)

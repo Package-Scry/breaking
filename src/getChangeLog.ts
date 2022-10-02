@@ -52,10 +52,10 @@ export const getChangeLog = async (npmPackage: {
         )
       : []
 
-    console.log("changeLogs")
-    console.log(changeLogs)
-    console.log("-------missingChangeLogs-------")
-    console.log(fileChangeLogs)
+    // console.log("changeLogs")
+    // console.log(changeLogs)
+    // console.log("-------missingChangeLogs-------")
+    // console.log(fileChangeLogs)
 
     const combinedChangeLogs = new Array(
       latestMajorVersionNumber - localMajorVersionNumber
@@ -80,9 +80,11 @@ export const getChangeLog = async (npmPackage: {
         }
       })
 
-    console.log("FINAL")
-    console.log(combinedChangeLogs)
+    // console.log("FINAL")
+    // console.log(combinedChangeLogs)
+    return combinedChangeLogs
   } catch (error) {
     console.log(error)
+    return null
   }
 }

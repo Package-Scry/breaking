@@ -14,10 +14,6 @@ export const getChangeLogFromGitHub = async (
 
   const body = data?.body
   const breakingHtml = body ? getBreakingChange(body) : null
-
-  console.log("bbb")
-  console.log(breakingHtml)
-
   const changeLog: ChangeLog = {
     version: `${version}.0.0`,
     changes: {

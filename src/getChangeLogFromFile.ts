@@ -1,4 +1,3 @@
-import semverRegex from "semver-regex"
 import findVersions from "find-versions"
 import fetch from "node-fetch"
 import { REG_X_HEADER } from "./constants.js"
@@ -27,16 +26,16 @@ export const getChangeLogFromFile = async (
       headers[latestVersionIndex].match(new RegExp("#", "g")) || []
     ).length
     const isVersionHeader = (header: string, headerCount: number) =>
-      isTheSameHeader(header, headerCount) && semverRegex().test(header)
+      isTheSameHeader(header, headerCount) &&
+      findVersions(header, { loose: true }).length > 0
     const versionHeaders = headers.filter(
       header =>
         isVersionHeader(header, headerCount) &&
         getMajorVersion(header) > localVersion
     )
     const majorVersionHeaders = versionHeaders.filter(header =>
-      header.includes(".0.0")
+      findVersions(header, { loose: true })?.[0].includes(".0.0")
     )
-
     const majorChangeLogs = majorVersionHeaders.map(header => {
       const start = data.indexOf(header)
       const nextVersionHeader = data
@@ -48,7 +47,7 @@ export const getChangeLogFromFile = async (
         : data.indexOf(nextVersionHeader)
 
       return {
-        version: semverRegex().exec(header)?.[0] ?? header,
+        version: findVersions(header, { loose: true })?.[0] ?? header,
         changes: {
           breaking: getBreakingChange(data.slice(start, end)),
         },

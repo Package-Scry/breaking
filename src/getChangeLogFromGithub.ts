@@ -1,36 +1,18 @@
-import fetch from "node-fetch"
 import { getBreakingChange } from "./getBreakingChange.js"
 import { ChangeLog } from "./getChangeLog.js"
-
-type TSFixMe = any
+import { getRelease } from "./github.js"
 
 export const getChangeLogFromGitHub = async (
-  baseUrl: string,
+  owner: string,
+  repo: string,
   version: number,
   latestVersion: number
 ): Promise<ChangeLog[]> => {
-  const fetchAndParseRelease = async (url: string) => {
-    try {
-      console.log("fetching", url)
-      const response = await fetch(url, {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      })
-
-      const data = (await response.json()) as TSFixMe
-      return data?.tag_name ? data : null
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   const data =
-    (await fetchAndParseRelease(`${baseUrl}/releases/tags/v${version}.0.0`)) ??
-    (await fetchAndParseRelease(`${baseUrl}/releases/tags/${version}.0.0`))
+    (await getRelease(owner, repo, `v${version}.0.0`)) ??
+    (await getRelease(owner, repo, `${version}.0.0`))
 
-  const body: string = data?.body
+  const body = data?.body
   const breakingHtml = body ? getBreakingChange(body) : null
 
   console.log("bbb")
@@ -46,7 +28,7 @@ export const getChangeLogFromGitHub = async (
   const hasReachedLatest = version === latestVersion
   const newChangeLogs = hasReachedLatest
     ? []
-    : await getChangeLogFromGitHub(baseUrl, version + 1, latestVersion)
+    : await getChangeLogFromGitHub(owner, repo, version + 1, latestVersion)
 
   return [changeLog, ...newChangeLogs]
 }

@@ -1,3 +1,7 @@
+import * as dotenv from "dotenv"
+
+dotenv.config()
+
 import { getChangeLog } from "./getChangeLog.js"
 
 export const getChangeLogs = async (

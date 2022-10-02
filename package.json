@@ -12,6 +12,8 @@
     "start": "yarn run build && node dist/src/index.js"
   },
   "dependencies": {
+    "@octokit/auth-app": "^4.0.6",
+    "@octokit/request": "^6.2.1",
     "express": "^4.18.1",
     "find-versions": "^5.1.0",
     "marked": "^4.1.0",

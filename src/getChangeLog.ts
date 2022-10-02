@@ -26,19 +26,17 @@ export const getChangeLog = async (npmPackage: {
     if (!wasSuccessful || !url.includes("github"))
       throw new Error("Couldn't find repo url")
 
-    const gitHubUrl: string = "https://github.com/zemirco/json2csv".replace(
-      "github.com",
-      "api.github.com/repos"
-    )
+    const owner = url.split("/").slice(-2, -1)[0]
     const { version: latestMajorVersionNumber } = await getLatestMajorVersion(
       name
     )
     const changeLogs = await getChangeLogFromGitHub(
-      gitHubUrl,
+      owner,
+      name,
       localMajorVersionNumber + 1,
       latestMajorVersionNumber
     )
-    const rawUrl = `${"https://github.com/zemirco/json2csv".replace(
+    const rawUrl = `${url.replace(
       "github.com",
       "raw.githubusercontent.com"
     )}/master/CHANGELOG.md`

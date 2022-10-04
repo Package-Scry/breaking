@@ -7,17 +7,27 @@ import { ChangeLog, getChangeLog } from "./getChangeLog.js"
 
 const port = process.env.PORT ?? 3000
 const app = express()
+
 app.use((req, res, next) => {
   express.json()(req, res, next)
 })
+
+type ResponseChangeLogs = {
+  name: string
+  changeLogs: ChangeLog[]
+}
+
 export const getChangeLogs = async (
   npmPackages: { name: string; currentVersion: string }[]
-): Promise<{ wasSuccessful: boolean; changeLogs: ChangeLog[][] }> => {
-  const changeLogs = await Promise.all(
-    npmPackages.map(async npmPackage => getChangeLog(npmPackage))
+): Promise<{ wasSuccessful: boolean; data: ResponseChangeLogs[] }> => {
+  const data = await Promise.all(
+    npmPackages.map(async npmPackage => ({
+      name: npmPackage.name,
+      changeLogs: await getChangeLog(npmPackage),
+    }))
   )
 
-  return { changeLogs, wasSuccessful: true }
+  return { data, wasSuccessful: true }
 }
 
 app.post(

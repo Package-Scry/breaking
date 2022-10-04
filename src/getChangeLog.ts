@@ -16,7 +16,7 @@ export interface ChangeLog {
 export const getChangeLog = async (npmPackage: {
   name: string
   currentVersion: string
-}) => {
+}): Promise<ChangeLog[]> => {
   const { currentVersion: localVersion, name } = npmPackage
   try {
     const localMajorVersionNumber = getMajorVersion(localVersion)

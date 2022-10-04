@@ -14,7 +14,7 @@ export const getChangeLogFromFile = async (
     console.log("fetching", url)
     const response = await fetch(url)
     const data: string = await response.text()
-    const headers: string[] = data.match(REG_X_HEADER) ?? []
+    const headers: string[] = data?.match(REG_X_HEADER) ?? []
     const latestVersionIndex = headers.findIndex(
       header =>
         header.toLocaleLowerCase().includes(`${latestVersion}.0.0`) &&

@@ -20,6 +20,8 @@ type ResponseChangeLogs = {
 export const getChangeLogs = async (
   npmPackages: { name: string; currentVersion: string }[]
 ): Promise<{ wasSuccessful: boolean; data: ResponseChangeLogs[] }> => {
+  console.log("NPOM")
+  console.log(JSON.stringify(npmPackages, null, 1))
   const data = await Promise.all(
     npmPackages.map(async npmPackage => ({
       name: npmPackage.name,

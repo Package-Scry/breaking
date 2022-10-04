@@ -25,7 +25,7 @@ export const isTheSameHeader = (header: string, headerCount: number) =>
 
 export const getGitHubRepoUrl = async (name: string) => {
   const { stdout, stderr } = await pExec(
-    `npm repo ${name} --browser=false --json`
+    `yarn npm info ${name} -f repository --json`
   )
 
   if (stderr) {
@@ -33,7 +33,9 @@ export const getGitHubRepoUrl = async (name: string) => {
     console.log("error", stderr)
   }
 
-  const url = JSON.parse(stdout)?.url.split("/").slice(0, 5).join("/")
+  const url = JSON.parse(stdout)
+    ?.repository?.url.replace("git+", "")
+    .replace(".git", "")
 
   return { wasSuccessful: !!stdout, url }
 }

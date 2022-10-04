@@ -21,7 +21,7 @@ export const getChangeLogFromGitHub = async (
     },
   }
 
-  const hasReachedLatest = version === latestVersion
+  const hasReachedLatest = version >= latestVersion
   const newChangeLogs = hasReachedLatest
     ? []
     : await getChangeLogFromGitHub(owner, repo, version + 1, latestVersion)

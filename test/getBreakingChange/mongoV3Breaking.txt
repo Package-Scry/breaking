@@ -1,0 +1,37 @@
+### **BREAKING CHANGES**
+
+- Drop Node.js 4 & 6 support
+- Upgrade `mongoose` to v5 and `mongodb` to v3 and drop old version support
+- Replace deprecated mongo operation
+- MongoStore need to supply client/clientPromise instead of db/dbPromise due to depns upgrade
+
+## Added
+
+- Add Node.js 10 & 12 support
+- Implement store.all function (#291)
+- Add option `writeOperationOptions` (#295)
+- Add Transparent crypto support (#314)
+
+## Changed
+
+* Change test framework from Mocha to Jest
+* Change linter from `xo` to `eslint`
+
+## [2.0.3] - 2018-12-03
+
+## Fixed
+
+- Fixed interval autoremove mode to use current date with every interval (#304, #305) (jlampise)
+
+## [2.0.2] - 2018-11-20
+
+## Fixed
+
+- Fxi #300 DeprecationWarning: collection.remove is deprecated. Use deleteOne, deleteMany, or bulkWrite instead
+- Fxi #297 DeprecationWarning: collection.update is deprecated. Use updateOne, updateMany, or bulkWrite instead
+
+## [2.0.1] - 2018-01-04
+
+## Fixed
+
+- Fixed #271 TypeError: cb is not a function (brainthinks)

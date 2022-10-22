@@ -3,6 +3,7 @@ import fetch from "node-fetch"
 import { REG_X_HEADER } from "./constants.js"
 import { getBreakingChange } from "./getBreakingChange.js"
 import { ChangeLog } from "./getChangeLog.js"
+import { marked } from "marked"
 
 const fetchFileFromGitHub = async (url: string): Promise<string> => {
   try {
@@ -40,7 +41,7 @@ export const getChangeLogFromFile = async (
       return {
         version: findVersions(header, { loose: true })?.[0] ?? header,
         changes: {
-          breaking: getBreakingChange(data.slice(start, end)),
+          breaking: marked.parse(getBreakingChange(data.slice(start, end))),
         },
       }
     })

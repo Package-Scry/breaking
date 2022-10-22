@@ -1,4 +1,3 @@
-import { marked } from "marked"
 import { REG_X_HEADER } from "./constants.js"
 import { escapeRegExp, isTheSameHeader } from "./utils.js"
 
@@ -25,6 +24,5 @@ export const getBreakingChange = (changeLog: string): string | null => {
     : changeLog.search(escapeRegExp(nextHeader))
 
   const breakingText = changeLog.slice(start, end)
-
-  return breakingText ? marked.parse(breakingText) : fallbackText
+  return breakingText ? breakingText : fallbackText
 }

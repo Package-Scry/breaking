@@ -45,11 +45,7 @@ export const getChangeLog = async (npmPackage: {
       ({ changes: { breaking } }) => !breaking
     )
     const fileChangeLogs = hasMissingChangeLog
-      ? await getChangeLogFromFile(
-          rawUrl,
-          localMajorVersionNumber,
-          latestMajorVersionNumber
-        )
+      ? await getChangeLogFromFile(rawUrl)
       : []
 
     // console.log("changeLogs")

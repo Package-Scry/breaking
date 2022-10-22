@@ -4,13 +4,24 @@ import { REG_X_HEADER } from "./constants.js"
 import { getBreakingChange } from "./getBreakingChange.js"
 import { ChangeLog } from "./getChangeLog.js"
 
-export const getChangeLogFromFile = async (
-  url: string
-): Promise<ChangeLog[] | null> => {
+const fetchFileFromGitHub = async (url: string): Promise<string> => {
   try {
     console.log("fetching file from", url)
     const response = await fetch(url)
     const data: string = await response.text()
+
+    return data
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+export const getChangeLogFromFile = async (
+  url: string
+): Promise<ChangeLog[] | null> => {
+  try {
+    const data = await fetchFileFromGitHub(url)
     const headers: string[] = data?.match(REG_X_HEADER) ?? []
     const majorVersionHeaders = headers.filter(header => {
       const version = findVersions(header, { loose: true })[0]

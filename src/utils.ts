@@ -8,7 +8,7 @@ export const getMajorVersion = (text: string): number =>
   parseInt(findVersions(text, { loose: true })?.[0].split(".")[0] ?? "", 10)
 
 export const getLatestMajorVersion = async (name: string) => {
-  const { stdout, stderr } = await pExec(`yarn info  ${name} version --json`)
+  const { stdout, stderr } = await pExec(`yarn info ${name} version --json`)
 
   if (stderr) {
     console.log("---------")
@@ -37,3 +37,5 @@ export const getGitHubRepoUrl = async (name: string) => {
 
   return { wasSuccessful: !!stdout, url }
 }
+export const escapeRegExp = (string: string) =>
+  string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") // $& means the whole matched string

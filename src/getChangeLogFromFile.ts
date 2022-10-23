@@ -24,7 +24,6 @@ export const getMajorVersionHeaders = (
 ) =>
   headers.filter(header => {
     const version = findVersions(header, { loose: true })[0]
-    const isMajorVersionHeader = version?.includes(".0.0")
     const hasSuffix =
       header.split(version).length > 1 &&
       (header.split(version)[1].slice(0, 6) === "-alpha" ||
@@ -35,19 +34,23 @@ export const getMajorVersionHeaders = (
     return isMajorVersionHeader
   })
 
-export const getMajorChangeLogs = (
-  changeLog: string,
-  majorVersionHeaders: string[]
-) =>
-  majorVersionHeaders.map((header, i) => {
-    const start = changeLog.indexOf(header)
-    const nextVersionHeader = majorVersionHeaders[i + 1]
+export const getMajorChangeLogs = (changeLog: string, headers: string[]) => {
+  const majorVersionHeaders = getMajorVersionHeaders(headers)
+
+  return majorVersionHeaders.map(majorVersionHeader => {
+    const start = changeLog.indexOf(majorVersionHeader)
+    const nextVersionHeader = headers
+      .slice(headers.findIndex(header => header === majorVersionHeader) + 1)
+      .filter(header => !!findVersions(header, { loose: true })?.[0])[0]
+    // console.log(majorVersionHeader)
     const end = !nextVersionHeader
       ? changeLog.length
       : changeLog.indexOf(nextVersionHeader)
 
     return {
       version: findVersions(header, { loose: true })?.[0] ?? header,
+        findVersions(majorVersionHeader, { loose: true })?.[0] ??
+        majorVersionHeader,
       changes: {
         breaking: marked.parse(getBreakingChange(changeLog.slice(start, end))),
       },
@@ -62,11 +65,7 @@ export const getChangeLogFromFile = async (
     const headers: string[] = changeLogString?.match(REG_X_HEADER) ?? []
     const majorVersionHeaders = getMajorVersionHeaders(headers)
 
-    const majorChangeLogs = getMajorChangeLogs(
-      changeLogString,
-      majorVersionHeaders
-    )
-
+    console.log("--------")
     return majorChangeLogs
   } catch (error) {
     console.error(error)

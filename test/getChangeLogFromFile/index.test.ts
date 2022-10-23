@@ -8,7 +8,6 @@ import {
 import { REG_X_HEADER } from "../../src/constants"
 import {
   json2csvMajorChangeLogs,
-  json2csvMajorChangeLogsConsistent,
   mongoMajorChangeLogs,
   reactMajorChangeLogs,
 } from "./mocks"

@@ -48,7 +48,7 @@ export const getMajorChangeLogs = (changeLog: string, headers: string[]) => {
       : changeLog.indexOf(nextVersionHeader)
 
     return {
-      version: findVersions(header, { loose: true })?.[0] ?? header,
+      version:
         findVersions(majorVersionHeader, { loose: true })?.[0] ??
         majorVersionHeader,
       changes: {
@@ -56,6 +56,7 @@ export const getMajorChangeLogs = (changeLog: string, headers: string[]) => {
       },
     }
   })
+}
 
 export const getChangeLogFromFile = async (
   url: string
@@ -65,6 +66,7 @@ export const getChangeLogFromFile = async (
     const headers: string[] = changeLogString?.match(REG_X_HEADER) ?? []
     const majorVersionHeaders = getMajorVersionHeaders(headers)
 
+    const majorChangeLogs = getMajorChangeLogs(changeLogString, headers)
     console.log("--------")
     return majorChangeLogs
   } catch (error) {

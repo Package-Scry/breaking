@@ -26,28 +26,34 @@ const getMajorVersionHeaders = (headers: string[]) =>
     return isMajorVersionHeader
   })
 
+const getMajorChangeLogs = (changeLog: string, majorVersionHeaders: string[]) =>
+  majorVersionHeaders.map((header, i) => {
+    const start = changeLog.indexOf(header)
+    const nextVersionHeader = majorVersionHeaders[i + 1]
+    const end = !nextVersionHeader
+      ? changeLog.length
+      : changeLog.indexOf(nextVersionHeader)
+
+    return {
+      version: findVersions(header, { loose: true })?.[0] ?? header,
+      changes: {
+        breaking: marked.parse(getBreakingChange(changeLog.slice(start, end))),
+      },
+    }
+  })
+
 export const getChangeLogFromFile = async (
   url: string
 ): Promise<ChangeLog[] | null> => {
   try {
-    const data = await fetchFileFromGitHub(url)
-    const headers: string[] = data?.match(REG_X_HEADER) ?? []
+    const changeLogString = await fetchFileFromGitHub(url)
+    const headers: string[] = changeLogString?.match(REG_X_HEADER) ?? []
     const majorVersionHeaders = getMajorVersionHeaders(headers)
 
-    const majorChangeLogs = majorVersionHeaders.map((header, i) => {
-      const start = data.indexOf(header)
-      const nextVersionHeader = majorVersionHeaders[i + 1]
-      const end = !nextVersionHeader
-        ? data.length
-        : data.indexOf(nextVersionHeader)
-
-      return {
-        version: findVersions(header, { loose: true })?.[0] ?? header,
-        changes: {
-          breaking: marked.parse(getBreakingChange(data.slice(start, end))),
-        },
-      }
-    })
+    const majorChangeLogs = getMajorChangeLogs(
+      changeLogString,
+      majorVersionHeaders
+    )
 
     return majorChangeLogs
   } catch (error) {

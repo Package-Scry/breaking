@@ -285,3 +285,167 @@ export const json2csvMajorChangeLogs = [
     },
   },
 ]
+
+export const json2csvMajorChangeLogsConsistent = [
+  {
+    version: "6.0.0",
+    changes: {
+      breaking:
+        '<h3 id="features">Features</h3>\n' +
+        "<ul>\n" +
+        '<li>expose JSON2CSVStreamParser (<a href="https://github.com/zemirco/json2csv/commit/d47670780f3dd07299ece99c7a5de409f714d21f">d476707</a>)</li>\n' +
+        "</ul>\n" +
+        '<h3 id="bug-fixes">Bug Fixes</h3>\n' +
+        "<ul>\n" +
+        '<li>fix missing ndjson option to CLI (<a href="https://github.com/zemirco/json2csv/commit/885e28bef66777d715f6df575f971525391efbbe">885e28b</a>)</li>\n' +
+        '<li>fix some issues in the AsyncParser tests (<a href="https://github.com/zemirco/json2csv/commit/695f116cca80f316a802b85c6065ad5db3b9d2d8">695f116</a>)</li>\n' +
+        '<li>reset lockfile due to changes in url patterns for github (<a href="https://github.com/zemirco/json2csv/commit/b58937294b383946067f0eb415e484f645c420f0">b589372</a>)</li>\n' +
+        '<li>unwind transform issue with nested arrays (<a href="https://github.com/zemirco/json2csv/issues/548">#548</a>) (<a href="https://github.com/zemirco/json2csv/commit/3cb57f3357b053ce0d4a26e474dae10e07d14ac4">3cb57f3</a>)</li>\n' +
+        '<li>update engines and volta (<a href="https://github.com/zemirco/json2csv/commit/98984ddd479439c904c8434cafac6bdbabf2e6f2">98984dd</a>)</li>\n' +
+        "</ul>\n",
+    },
+  },
+  {
+    version: "6.0.0",
+    changes: {
+      breaking:
+        '<h3 id="⚠-breaking-changes">⚠ BREAKING CHANGES</h3>\n' +
+        "<ul>\n" +
+        "<li><p>Drop support for Node &lt; v12</p>\n" +
+        "</li>\n" +
+        "<li><p>AsyncParser API has changed, see the <code>Upgrading from 5.X to 6.X</code> section for details.</p>\n" +
+        "</li>\n" +
+        "<li><p>fix: consolidate the API of AsyncParser and parseAsync</p>\n" +
+        "</li>\n" +
+        "<li><p>feat: simplify AsyncParser</p>\n" +
+        "</li>\n" +
+        "<li><p>chore: drop support for node 11</p>\n" +
+        "</li>\n" +
+        "<li><p>refactor: improve AsyncParser parse method</p>\n" +
+        "</li>\n" +
+        "<li><p>docs: add links to node docs and fix few small issues</p>\n" +
+        "</li>\n" +
+        "<li><p>In the JavaScript modules, <code>formatters</code> are introduced and the <code>quote</code>, <code>escapedQuote</code> and <code>excelStrings</code> options are removed. See the migration notes in the readme. CLI hasn&#39;t changed.</p>\n" +
+        "</li>\n" +
+        "</ul>\n",
+    },
+  },
+  {
+    version: "5.0.0",
+    changes: {
+      breaking:
+        '<h3 id="⚠-breaking-changes">⚠ BREAKING CHANGES</h3>\n' +
+        "<ul>\n" +
+        "<li><p>Node 8 and 9 no longer supported, use Node 10 or greater. It might still work, but it has reached End-Of-Life.</p>\n" +
+        "</li>\n" +
+        "<li><p>module no longer takes <code>unwind</code>, <code>unwindBlank</code>, <code>flatten</code> or the <code>flattenSeparator</code> options, instead see the new <code>transforms</code> option. CLI options are unchanged from the callers side, but use the built in transforms under the hood.</p>\n" +
+        "</li>\n" +
+        "<li><p>Add support for transforms</p>\n" +
+        "</li>\n" +
+        "<li><p>Add documentation about transforms</p>\n" +
+        "</li>\n" +
+        "<li><p>remove extra commonjs build, use starting point in package.json <code>main</code> field.</p>\n" +
+        "</li>\n" +
+        "<li><p>Renamed <code>doubleQuote</code> to <code>escapedQuote</code></p>\n" +
+        "</li>\n" +
+        "<li><p>remove <code>stringify</code> option</p>\n" +
+        "</li>\n" +
+        "<li><p><code>--fields-config</code> option has been removed, use the new <code>--config</code> option for all configuration, not just fields.</p>\n" +
+        "</li>\n" +
+        "<li><p>Drop node 6 and 7, and add node 11 and 12</p>\n" +
+        "</li>\n" +
+        "</ul>\n",
+    },
+  },
+  {
+    version: "4.0.0",
+    changes: {
+      breaking:
+        '<h3 id="bug-fixes">Bug Fixes</h3>\n' +
+        "<ul>\n" +
+        '<li>Replace webpack with rollup packaging (<a href="https://github.com/zemirco/json2csv/issues/266">#266</a>) (<a href="https://github.com/zemirco/json2csv/commit/a9f8020">a9f8020</a>)</li>\n' +
+        "</ul>\n" +
+        '<h3 id="features">Features</h3>\n' +
+        "<ul>\n" +
+        '<li>Pass transform options through (<a href="https://github.com/zemirco/json2csv/issues/262">#262</a>) (<a href="https://github.com/zemirco/json2csv/commit/650913f">650913f</a>)</li>\n' +
+        "</ul>\n" +
+        '<p><a name="4.0.0-alpha.2"></a></p>\n',
+    },
+  },
+  {
+    version: "4.0.0",
+    changes: {
+      breaking:
+        '<h3 id="bug-fixes">Bug Fixes</h3>\n' +
+        "<ul>\n" +
+        '<li>flatten issue with toJSON (<a href="https://github.com/zemirco/json2csv/issues/259">#259</a>) (<a href="https://github.com/zemirco/json2csv/commit/7006d2b">7006d2b</a>)</li>\n' +
+        "</ul>\n" +
+        '<p><a name="4.0.0-alpha.1"></a></p>\n',
+    },
+  },
+  {
+    version: "4.0.0",
+    changes: {
+      breaking:
+        '<h3 id="bug-fixes">Bug Fixes</h3>\n' +
+        "<ul>\n" +
+        '<li>Remove TypeScript definition (<a href="https://github.com/zemirco/json2csv/issues/256">#256</a>) (<a href="https://github.com/zemirco/json2csv/commit/4f09694">4f09694</a>)</li>\n' +
+        "</ul>\n" +
+        '<p><a name="4.0.0-alpha.0"></a></p>\n',
+    },
+  },
+  {
+    version: "4.0.0",
+    changes: {
+      breaking:
+        '<h3 id="breaking-changes">BREAKING CHANGES</h3>\n' +
+        "<ul>\n" +
+        "<li><p>Replaces field-list with field-config</p>\n" +
+        "</li>\n" +
+        "<li><p>Remove <code>preserveNewLinesInValues</code> option, preserve by default</p>\n" +
+        "</li>\n" +
+        "<li><p>Refactor the entire library to ES6</p>\n" +
+        "</li>\n" +
+        "<li><p>Fix PR issues</p>\n" +
+        "</li>\n" +
+        "<li><p>Add strict mode for node 4.X</p>\n" +
+        "</li>\n" +
+        "<li><p>Remove fieldNames</p>\n" +
+        "</li>\n" +
+        "<li><p>Increase coverage back to 100%</p>\n" +
+        "</li>\n" +
+        "<li><p>callback is no longer available, just return the csv from the json2csv.</p>\n" +
+        "</li>\n" +
+        "</ul>\n" +
+        "<ul>\n" +
+        "<li>updated tests</li>\n" +
+        "<li>updated readme</li>\n" +
+        "</ul>\n" +
+        "<ul>\n" +
+        "<li><ul>\n" +
+        "<li>Rename unwindPath to unwind</li>\n" +
+        "</ul>\n" +
+        "</li>\n" +
+        "<li><p>Fix field-list in CLI</p>\n" +
+        "</li>\n" +
+        "<li><p>newLine removed, eol kept.</p>\n" +
+        "</li>\n" +
+        "<li><p>Rename del to delimiter to match the cli flag</p>\n" +
+        "</li>\n" +
+        "<li><p>Rename quotes to quote to match the cli flag</p>\n" +
+        "</li>\n" +
+        "<li><p>Remove unused double quotes comment</p>\n" +
+        "</li>\n" +
+        "<li><p>Fix noHeader in CLI</p>\n" +
+        "</li>\n" +
+        "<li><p>Revert &quot;Remove unused double quotes comment&quot;</p>\n" +
+        "</li>\n" +
+        "</ul>\n" +
+        "<p>This reverts commit 250d3e6ddf3062cbdc1e0174493a37fa21197d8e.</p>\n" +
+        "<ul>\n" +
+        "<li>Add doubleQuote to CLI</li>\n" +
+        "<li>Rename hasCSVColumnTitle to noHeader to keep in line with the CLI</li>\n" +
+        "</ul>\n",
+    },
+  },
+]

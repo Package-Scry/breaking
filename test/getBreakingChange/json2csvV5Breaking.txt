@@ -1,0 +1,13 @@
+### ⚠ BREAKING CHANGES
+
+* Node 8 and 9 no longer supported, use Node 10 or greater. It might still work, but it has reached End-Of-Life.
+* module no longer takes `unwind`, `unwindBlank`, `flatten` or the `flattenSeparator` options, instead see the new `transforms` option. CLI options are unchanged from the callers side, but use the built in transforms under the hood.
+
+* Add support for transforms
+
+* Add documentation about transforms
+* remove extra commonjs build, use starting point in package.json `main` field.
+* Renamed `doubleQuote` to `escapedQuote`
+* remove `stringify` option
+* `--fields-config` option has been removed, use the new `--config` option for all configuration, not just fields.
+* Drop node 6 and 7, and add node 11 and 12

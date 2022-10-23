@@ -4,6 +4,7 @@ import { REG_X_HEADER } from "./constants.js"
 import { getBreakingChange } from "./getBreakingChange.js"
 import { ChangeLog } from "./getChangeLog.js"
 import { marked } from "marked"
+import { getHeaders } from "./utils.js"
 
 const fetchFileFromGitHub = async (url: string): Promise<string> => {
   try {
@@ -62,7 +63,7 @@ export const getChangeLogFromFile = async (
 ): Promise<ChangeLog[] | null> => {
   try {
     const changeLogString = await fetchFileFromGitHub(url)
-    const headers: string[] = changeLogString?.match(REG_X_HEADER) ?? []
+    const headers: string[] = getHeaders(changeLogString)
 
     const majorChangeLogs = getMajorChangeLogs(changeLogString, headers)
     console.log("--------")

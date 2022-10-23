@@ -5,7 +5,6 @@ import {
   getMajorChangeLogs,
   getMajorVersionHeaders,
 } from "../../src/getChangeLogFromFile"
-import { REG_X_HEADER } from "../../src/constants"
 import {
   json2csvMajorChangeLogs,
   mongoMajorChangeLogs,

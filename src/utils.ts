@@ -1,6 +1,7 @@
 import util from "util"
 import { exec } from "child_process"
 import findVersions from "find-versions"
+import { REG_X_HEADER } from "./constants.js"
 
 const pExec = util.promisify(exec)
 
@@ -37,5 +38,8 @@ export const getGitHubRepoUrl = async (name: string) => {
 
   return { wasSuccessful: !!stdout, url }
 }
+export const getHeaders = (changeLog: string) =>
+  changeLog.match(REG_X_HEADER) ?? [""]
+
 export const escapeRegExp = (string: string) =>
   string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") // $& means the whole matched string

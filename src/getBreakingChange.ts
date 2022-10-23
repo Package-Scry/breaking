@@ -1,8 +1,7 @@
-import { REG_X_HEADER } from "./constants.js"
-import { escapeRegExp, isTheSameHeader } from "./utils.js"
+import { escapeRegExp, getHeaders, isTheSameHeader } from "./utils.js"
 
 export const getBreakingChange = (changeLog: string): string | null => {
-  const headers: string[] = changeLog.match(REG_X_HEADER) ?? [""]
+  const headers: string[] = getHeaders(changeLog)
   const breakingChangeIndex = headers.findIndex(header =>
     header.toLocaleLowerCase().includes("breaking")
   )

@@ -13,6 +13,7 @@ test("getting breaking changes in a file with inconsistent header types", () => 
 
   expect(breakingChanges).eq(changesHtml)
 })
+
 test("getting breaking changes in a file with proper header types", () => {
   const uriRaw = path.join(__dirname, "json2csvV5Raw.txt")
   const uriBreaking = path.join(__dirname, "json2csvV5Breaking.txt")

@@ -42,7 +42,6 @@ export const getMajorChangeLogs = (changeLog: string, headers: string[]) => {
     const nextVersionHeader = headers
       .slice(headers.findIndex(header => header === majorVersionHeader) + 1)
       .filter(header => !!findVersions(header, { loose: true })?.[0])[0]
-    // console.log(majorVersionHeader)
     const end = !nextVersionHeader
       ? changeLog.length
       : changeLog.indexOf(nextVersionHeader)
@@ -64,7 +63,6 @@ export const getChangeLogFromFile = async (
   try {
     const changeLogString = await fetchFileFromGitHub(url)
     const headers: string[] = changeLogString?.match(REG_X_HEADER) ?? []
-    const majorVersionHeaders = getMajorVersionHeaders(headers)
 
     const majorChangeLogs = getMajorChangeLogs(changeLogString, headers)
     console.log("--------")

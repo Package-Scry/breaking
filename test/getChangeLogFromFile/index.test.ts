@@ -10,6 +10,7 @@ import {
   json2csvMajorChangeLogs,
   json2csvMajorChangeLogsConsistent,
   mongoMajorChangeLogs,
+  reactMajorChangeLogs,
 } from "./mocks"
 
 const json2csvMajorVersionHeaders = [
@@ -69,12 +70,13 @@ test("getting major change logs in a file with inconsistent header types 2", () 
   assert.deepEqual(majorChangeLogs, json2csvMajorChangeLogs, "matches original")
 })
 
-// test("getting major change logs in a file with consistent header types", () => {
-//   const uriRaw = path.join(__dirname, "json2csvRawConsistent.txt")
-//   const changesRaw = fs.readFileSync(uriRaw, "utf-8").toString()
-//   const headers: string[] = changesRaw?.match(REG_X_HEADER) ?? []
-//   const majorVersionHeaders = getMajorVersionHeaders(headers)
-//   const majorChangeLogs = getMajorChangeLogs(changesRaw, majorVersionHeaders)
+test("getting major change logs in a file with consistent header types", () => {
+  const uriRaw = path.join(__dirname, "reactRaw.txt")
+  const changesRaw = fs.readFileSync(uriRaw, "utf-8").toString()
+  const headers: string[] = changesRaw?.match(REG_X_HEADER) ?? []
+  const majorChangeLogs = getMajorChangeLogs(changesRaw, headers)
 
-//   expect(majorChangeLogs).toStrictEqual(json2csvMajorChangeLogsConsistent)
-// })
+  expect(majorChangeLogs[1].changes).toStrictEqual(
+    reactMajorChangeLogs[1].changes
+  )
+})

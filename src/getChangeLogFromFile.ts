@@ -18,18 +18,21 @@ const fetchFileFromGitHub = async (url: string): Promise<string> => {
   }
 }
 
+const getMajorVersionHeaders = (headers: string[]) =>
+  headers.filter(header => {
+    const version = findVersions(header, { loose: true })[0]
+    const isMajorVersionHeader = version?.includes("0.0")
+
+    return isMajorVersionHeader
+  })
+
 export const getChangeLogFromFile = async (
   url: string
 ): Promise<ChangeLog[] | null> => {
   try {
     const data = await fetchFileFromGitHub(url)
     const headers: string[] = data?.match(REG_X_HEADER) ?? []
-    const majorVersionHeaders = headers.filter(header => {
-      const version = findVersions(header, { loose: true })[0]
-      const isMajorVersionHeader = version?.includes("0.0")
-
-      return isMajorVersionHeader
-    })
+    const majorVersionHeaders = getMajorVersionHeaders(headers)
 
     const majorChangeLogs = majorVersionHeaders.map((header, i) => {
       const start = data.indexOf(header)

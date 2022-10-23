@@ -23,6 +23,6 @@ export const getBreakingChange = (changeLog: string): string | null => {
     ? changeLog.length
     : changeLog.search(escapeRegExp(nextHeader))
 
-  const breakingText = changeLog.slice(start, end)
+  const breakingText = changeLog.slice(start, end).trim()
   return breakingText ? breakingText : fallbackText
 }

@@ -18,10 +18,19 @@ const fetchFileFromGitHub = async (url: string): Promise<string> => {
   }
 }
 
-export const getMajorVersionHeaders = (headers: string[]) =>
+export const getMajorVersionHeaders = (
+  headers: string[],
+  shouldIncludeAlphas: boolean = false
+) =>
   headers.filter(header => {
     const version = findVersions(header, { loose: true })[0]
     const isMajorVersionHeader = version?.includes(".0.0")
+    const hasSuffix =
+      header.split(version).length > 1 &&
+      (header.split(version)[1].slice(0, 6) === "-alpha" ||
+        header.split(version)[1].slice(0, 5) === "-beta")
+    const isMajorVersionHeader =
+      version?.includes(".0.0") && (!hasSuffix || shouldIncludeAlphas)
 
     return isMajorVersionHeader
   })

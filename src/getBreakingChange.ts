@@ -36,5 +36,5 @@ export const getBreakingChange = (changeLog: string): string | null => {
     : changeLog.search(escapeRegExp(nextHeader))
 
   const breakingText = changeLog.slice(start, end).trim()
-  return breakingText ? breakingText : fallbackText
+  return breakingText ?? fallbackText.trim()
 }

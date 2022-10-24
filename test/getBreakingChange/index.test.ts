@@ -24,3 +24,14 @@ test("getting breaking changes in a file with proper header types", () => {
 
   expect(breakingChanges).eq(changesHtml)
 })
+
+test("return the entire change log if there's no breaking change", () => {
+  const uriRaw = path.join(__dirname, "reactV17Raw.txt")
+  const uriBreaking = path.join(__dirname, "reactV17Breaking.txt")
+
+  const changesRaw = fs.readFileSync(uriRaw, "utf-8").toString()
+  const changesHtml = fs.readFileSync(uriBreaking, "utf-8").toString()
+  const breakingChanges = getBreakingChange(changesRaw)
+
+  expect(breakingChanges).eq(changesHtml)
+})

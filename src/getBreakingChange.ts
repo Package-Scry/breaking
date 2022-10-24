@@ -7,7 +7,7 @@ export const getBreakingChange = (changeLog: string): string | null => {
   )
   const fallbackText = changeLog.replace(headers[0], "")
 
-  if (breakingChangeIndex === -1) return fallbackText
+  if (breakingChangeIndex === -1) return fallbackText.trim()
 
   const headerCount = (
     headers[breakingChangeIndex].match(new RegExp("#", "g")) ?? []

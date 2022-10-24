@@ -1,6 +1,5 @@
 import findVersions from "find-versions"
 import fetch from "node-fetch"
-import { REG_X_HEADER } from "./constants.js"
 import { getBreakingChange } from "./getBreakingChange.js"
 import { ChangeLog } from "./getChangeLog.js"
 import { marked } from "marked"

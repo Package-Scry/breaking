@@ -16,14 +16,24 @@ export const getBreakingChange = (changeLog: string): string | null => {
   const nextSameHeader = headers
     .slice(breakingChangeIndex + 1)
     .find(header => isTheSameHeader(header, headerCount))
+  const nextSameHeaderPosition = headers.findIndex(
+    header => header === nextSameHeader
+  )
   const nextBiggerHeader = headers
     .slice(breakingChangeIndex + 1)
     .find(header => header.match(new RegExp("#", "g")).length < headerCount)
-  const isLastItem = !nextSameHeader && !nextBiggerHeader
+  const nextBiggerHeaderPosition = headers.findIndex(
+    header => header === nextBiggerHeader
+  )
+  const nextHeader =
+    nextBiggerHeaderPosition < nextSameHeaderPosition
+      ? nextBiggerHeader ?? nextSameHeader
+      : nextSameHeader ?? nextBiggerHeader
+  const isLastItem = !nextHeader
   const start = changeLog.search(escapeRegExp(headers[breakingChangeIndex]))
   const end = isLastItem
     ? changeLog.length
-    : changeLog.search(escapeRegExp(nextSameHeader ?? nextBiggerHeader))
+    : changeLog.search(escapeRegExp(nextHeader))
 
   const breakingText = changeLog.slice(start, end).trim()
   return breakingText ? breakingText : fallbackText

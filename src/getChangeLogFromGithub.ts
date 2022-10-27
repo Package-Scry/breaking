@@ -1,3 +1,4 @@
+import { marked } from "marked"
 import { getBreakingChange } from "./getBreakingChange.js"
 import { ChangeLog } from "./getChangeLog.js"
 import { getRelease } from "./github.js"
@@ -13,7 +14,7 @@ export const getChangeLogFromGitHub = async (
     (await getRelease(owner, repo, `${version}.0.0`))
 
   const body = data?.body
-  const breakingHtml = body ? getBreakingChange(body) : null
+  const breakingHtml = marked.parse(body ? getBreakingChange(body) : null)
   const changeLog: ChangeLog = {
     version: `${version}.0.0`,
     changes: {

@@ -1,4 +1,4 @@
-export type Error = {
+export type CustomError = {
   message: string
   code: number
 }

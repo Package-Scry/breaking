@@ -4,7 +4,7 @@ import express, { Request, Response } from "express"
 dotenv.config()
 
 import { ChangeLog, getChangeLog } from "./getChangeLog.js"
-import { Error, throwError } from "./error.js"
+import { CustomError, throwError } from "./error.js"
 import { ERROR_TYPES } from "./constants.js"
 
 const port = process.env.PORT ?? 3000
@@ -56,7 +56,7 @@ app.post(
 
       res.status(200).json(changeLogs)
     } catch (error) {
-      const { message, code } = error as Error
+      const { message, code } = error as CustomError
 
       res.status(code).json({ message })
     }

@@ -14,7 +14,7 @@ export const getChangeLogFromGitHub = async (
     (await getRelease(owner, repo, `${version}.0.0`))
 
   const body = data?.body
-  const breakingHtml = marked.parse(body ? getBreakingChange(body) : null)
+  const breakingHtml = body ? marked.parse(getBreakingChange(body)) : null
   const changeLog: ChangeLog = {
     version: `${version}.0.0`,
     changes: {

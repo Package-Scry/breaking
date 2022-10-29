@@ -22,13 +22,19 @@ type ResponseChangeLogs = {
 export const getChangeLogs = async (
   npmPackages: { name: string; currentVersion: string }[]
 ): Promise<{ data: ResponseChangeLogs[] }> => {
-  if (!Array.isArray(npmPackages)) throwError(ERROR_TYPES.INVALID, 400)
+  if (!Array.isArray(npmPackages))
+    throwError(ERROR_TYPES.INVALID, "`packages` isn't an array", 400)
 
   const notEmptyPackages = npmPackages.filter(
     ({ name, currentVersion }) => name && currentVersion
   )
 
-  if (notEmptyPackages.length === 0) throwError(ERROR_TYPES.INVALID, 400)
+  if (notEmptyPackages.length === 0)
+    throwError(
+      ERROR_TYPES.INVALID,
+      "All items in `packages` are missing `name` or `currentVersion` keys",
+      400
+    )
 
   const data = await Promise.all(
     notEmptyPackages.map(async npmPackage => ({
@@ -56,9 +62,9 @@ app.post(
 
       res.status(200).json(changeLogs)
     } catch (error) {
-      const { message, code } = error as CustomError
+      const { type, message, code } = error as CustomError
 
-      res.status(code).json({ message })
+      res.status(code).json({ type, message })
     }
   }
 )

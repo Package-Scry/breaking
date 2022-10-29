@@ -4,6 +4,8 @@ import express, { Request, Response } from "express"
 dotenv.config()
 
 import { ChangeLog, getChangeLog } from "./getChangeLog.js"
+import { Error, throwError } from "./error.js"
+import { ERROR_TYPES } from "./constants.js"
 
 const port = process.env.PORT ?? 3000
 const app = express()
@@ -19,34 +21,48 @@ type ResponseChangeLogs = {
 
 export const getChangeLogs = async (
   npmPackages: { name: string; currentVersion: string }[]
-): Promise<{ wasSuccessful: boolean; data: ResponseChangeLogs[] }> => {
+): Promise<{ data: ResponseChangeLogs[] }> => {
+  if (!Array.isArray(npmPackages)) throwError(ERROR_TYPES.INVALID, 400)
+
+  const notEmptyPackages = npmPackages.filter(
+    ({ name, currentVersion }) => name && currentVersion
+  )
+
+  if (notEmptyPackages.length === 0) throwError(ERROR_TYPES.INVALID, 400)
+
   const data = await Promise.all(
-    npmPackages.map(async npmPackage => ({
+    notEmptyPackages.map(async npmPackage => ({
       name: npmPackage.name,
       changeLogs: await getChangeLog(npmPackage),
     }))
   )
 
-  return { data, wasSuccessful: true }
+  return { data }
 }
 
 app.post(
   "/changeLogs",
   async (
     req: Request<
-      any,
-      any,
+      unknown,
+      unknown,
       { packages: { name: string; currentVersion: string }[] }
     >,
     res: Response
   ) => {
-    const { packages } = req.body
-    const changeLogs = await getChangeLogs(packages)
+    try {
+      const { packages } = req.body
+      const changeLogs = await getChangeLogs(packages)
 
-    res.json(changeLogs)
+      res.status(200).json(changeLogs)
+    } catch (error) {
+      const { message, code } = error as Error
+
+      res.status(code).json({ message })
+    }
   }
 )
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Breaking app listening on port ${port}`)
 })

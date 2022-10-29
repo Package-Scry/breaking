@@ -13,6 +13,22 @@ const app = express()
 app.use((req, res, next) => {
   express.json()(req, res, next)
 })
+app.use((_, res, next) => {
+  try {
+    if (process.env.IS_MAINTENANCE_MODE === "true")
+      throwError(
+        ERROR_TYPES.MAINTENANCE,
+        "Breaking API is under maintenance.",
+        502
+      )
+
+    next()
+  } catch (error) {
+    const { type, message, code } = error as CustomError
+
+    res.status(code).json({ type, message })
+  }
+})
 
 type ResponseChangeLogs = {
   name: string

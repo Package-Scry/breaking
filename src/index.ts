@@ -85,6 +85,25 @@ app.post(
   }
 )
 
+app.post("*", (_, res) => {
+  try {
+    throwError(ERROR_TYPES.NOT_FOUND, "The requested route wasn't found.", 404)
+  } catch (error) {
+    const { type, message, code } = error as CustomError
+
+    res.status(code).json({ type, message })
+  }
+})
+app.get("*", (_, res) => {
+  try {
+    throwError(ERROR_TYPES.NOT_FOUND, "The requested route wasn't found.", 404)
+  } catch (error) {
+    const { type, message, code } = error as CustomError
+
+    res.status(code).json({ type, message })
+  }
+})
+
 app.listen(port, () => {
   console.log(`Breaking app listening on port ${port}`)
 })

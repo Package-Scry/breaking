@@ -3,4 +3,5 @@ export enum ERROR_TYPES {
   INVALID = "Invalid request",
   MAINTENANCE = "Maintenance",
   NOT_FOUND = "Not found",
+  UNAUTHORIZED = "Unauthorized",
 }

@@ -13,6 +13,7 @@ const app = express()
 app.use((req, res, next) => {
   express.json()(req, res, next)
 })
+
 app.use((_, res, next) => {
   try {
     if (process.env.IS_MAINTENANCE_MODE === "true")
@@ -20,6 +21,25 @@ app.use((_, res, next) => {
         ERROR_TYPES.MAINTENANCE,
         "Breaking API is under maintenance.",
         502
+      )
+
+    next()
+  } catch (error) {
+    const { type, message, code } = error as CustomError
+
+    res.status(code).json({ type, message })
+  }
+})
+
+app.use((req, res, next) => {
+  const apiKey = req.header("breaking-api-key")
+
+  try {
+    if (apiKey !== "123456")
+      throwError(
+        ERROR_TYPES.UNAUTHORIZED,
+        "You're unauthorized to access the API without the proper key.",
+        401
       )
 
     next()

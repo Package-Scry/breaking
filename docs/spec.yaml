@@ -1,0 +1,76 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Breaking API
+  description: An API to get breaking changes for packages
+
+servers:
+  - url: https://example.io/v1
+
+# Basic authentication
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Breaking-API-Key
+security:
+  - ApiKeyAuth: []
+
+paths:
+  /changeLogs:
+    post:
+      description: Returns breaking changes for packages, starting from current version to the latest version
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                packages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      currentVersion:
+                        type: string
+      responses:
+        "200":
+          description: Successfully returned breaking changes for packages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        changeLogs:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              version:
+                                type: string
+                              changes:
+                                type: object
+                                properties:
+                                  breaking:
+                                    type: string
+
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string

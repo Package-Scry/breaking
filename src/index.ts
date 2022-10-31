@@ -60,6 +60,12 @@ export const getChangeLogs = async (
 ): Promise<{ data: ResponseChangeLogs[] }> => {
   if (!Array.isArray(npmPackages))
     throwError(ERROR_TYPES.INVALID, "`packages` isn't an array", 400)
+  if (npmPackages.length > 100)
+    throwError(
+      ERROR_TYPES.INVALID,
+      "`packages` length shouldn't be more than 100",
+      400
+    )
 
   const notEmptyPackages = npmPackages.filter(
     ({ name, currentVersion }) => name && currentVersion

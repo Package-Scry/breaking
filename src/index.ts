@@ -35,7 +35,7 @@ app.use((req, res, next) => {
   const apiKey = req.header("breaking-api-key")
 
   try {
-    if (apiKey !== "123456")
+    if (apiKey !== process.env.PUBLIC_API_KEY)
       throwError(
         ERROR_TYPES.UNAUTHORIZED,
         "You're unauthorized to access the API without the proper key.",

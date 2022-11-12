@@ -7,6 +7,7 @@ import { ChangeLog, getChangeLog } from "./getChangeLog.js"
 import { CustomError, throwError } from "./error.js"
 import { ERROR_TYPES } from "./constants.js"
 
+const port = process.env.PORT ?? 3000
 const app = new Hono()
 
 app.use(async (c: Context, next: Next) => {
@@ -128,4 +129,6 @@ app.get("*", (c: Context) => {
   }
 })
 
-export default app
+app.listen(port, () => {
+  console.log(`Breaking app listening on port ${port}`)
+})

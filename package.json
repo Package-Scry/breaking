@@ -9,7 +9,7 @@
   "scripts": {
     "build": "yarn run clean && tsc",
     "clean": "rimraf dist",
-    "start": "yarn run build && node dist/src/index.js",
+    "start": "wrangler dev",
     "test": "vitest"
   },
   "dependencies": {
@@ -20,7 +20,6 @@
     "find-versions": "^5.1.0",
     "hono": "^2.5.0",
     "marked": "^4.1.0",
-    "node-fetch": "^3.2.10",
     "semver-regex": "^4.0.5"
   },
   "devDependencies": {

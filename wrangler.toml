@@ -1,0 +1,6 @@
+name = "breaking"
+main = "src/index.ts"
+node_compat = true
+exclude = ["node:stream", "node:buffer", "node:url", "node:util", "node:net"]
+
+compatibility_date = "2022-10-12"

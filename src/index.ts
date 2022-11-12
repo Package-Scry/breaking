@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv"
-import express, { Request, Response } from "express"
+import { Hono, Context, Next } from "hono"
 
 dotenv.config()
 
@@ -8,13 +8,11 @@ import { CustomError, throwError } from "./error.js"
 import { ERROR_TYPES } from "./constants.js"
 
 const port = process.env.PORT ?? 3000
-const app = express()
+const app = new Hono()
 
-app.use((req, res, next) => {
-  express.json()(req, res, next)
-})
+app.use(async (c: Context, next: Next) => {
+  const json = c.json as Context.json
 
-app.use((_, res, next) => {
   try {
     if (process.env.IS_MAINTENANCE_MODE === "true")
       throwError(
@@ -23,16 +21,17 @@ app.use((_, res, next) => {
         502
       )
 
-    next()
+    await next()
   } catch (error) {
     const { type, message, code } = error as CustomError
 
-    res.status(code).json({ type, message })
+    return json({ type, message }, code)
   }
 })
 
-app.use((req, res, next) => {
-  const apiKey = req.header("breaking-api-key")
+app.use(async (c: Context, next: Next) => {
+  const apiKey = c.req.headers.get("breaking-api-key")
+  const json = c.json as Context.json
 
   try {
     if (apiKey !== process.env.PUBLIC_API_KEY)
@@ -42,11 +41,11 @@ app.use((req, res, next) => {
         401
       )
 
-    next()
+    await next()
   } catch (error) {
     const { type, message, code } = error as CustomError
 
-    res.status(code).json({ type, message })
+    return json({ type, message }, code)
   }
 })
 
@@ -88,45 +87,45 @@ export const getChangeLogs = async (
   return { data }
 }
 
-app.post(
-  "/changeLogs",
-  async (
-    req: Request<
-      unknown,
-      unknown,
-      { packages: { name: string; currentVersion: string }[] }
-    >,
-    res: Response
-  ) => {
-    try {
-      const { packages } = req.body
-      const changeLogs = await getChangeLogs(packages)
+app.post("/changeLogs", async (c: Context) => {
+  const { req } = c
+  const json = c.json as Context.json
 
-      res.status(200).json(changeLogs)
-    } catch (error) {
-      const { type, message, code } = error as CustomError
-
-      res.status(code).json({ type, message })
-    }
-  }
-)
-
-app.post("*", (_, res) => {
   try {
-    throwError(ERROR_TYPES.NOT_FOUND, "The requested route wasn't found.", 404)
+    const body = (await req.json()) as {
+      packages: { name: string; currentVersion: string }[]
+    }
+    const { packages } = body
+    const changeLogs = await getChangeLogs(packages)
+
+    return json(changeLogs, 200)
   } catch (error) {
     const { type, message, code } = error as CustomError
 
-    res.status(code).json({ type, message })
+    return json({ type, message }, code)
   }
 })
-app.get("*", (_, res) => {
+
+app.post("*", (c: Context) => {
+  const json = c.json as Context.json
+
   try {
     throwError(ERROR_TYPES.NOT_FOUND, "The requested route wasn't found.", 404)
   } catch (error) {
     const { type, message, code } = error as CustomError
 
-    res.status(code).json({ type, message })
+    return json({ type, message }, code)
+  }
+})
+
+app.get("*", (c: Context) => {
+  const json = c.json as Context.json
+  try {
+    throwError(ERROR_TYPES.NOT_FOUND, "The requested route wasn't found.", 404)
+  } catch (error) {
+    const { type, message, code } = error as CustomError
+
+    return json({ type, message }, code)
   }
 })
 

@@ -65,13 +65,18 @@ export const getChangeLog = async (npmPackage: {
         const fileChangeLog = fileChangeLogs.find(
           ({ version }) => version === `${versionToCheck}.0.0`
         )
+        const fallBack = `This version does't seem to have a proper changelog. You could try checking the following links:
+        <ul><li><a href="${url}/blob/master/CHANGELOG.md" target="_blank">Changelog file</a></li>
+        <li><a href="${url}/releases/tag/${`${versionToCheck}.0.0`}" target="_blank">Release changelog #1</a></li>
+        <li><a href="${url}/releases/tag/${`v${versionToCheck}.0.0`}" target="_blank">Release changelog #2</a></li></ul>`
 
         return {
           ...releaseChangeLog,
           changes: {
             breaking:
               releaseChangeLog?.changes.breaking ??
-              fileChangeLog?.changes.breaking,
+              fileChangeLog?.changes.breaking ??
+              fallBack,
           },
         }
       })

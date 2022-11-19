@@ -2,6 +2,7 @@ import util from "util"
 import { exec } from "child_process"
 import findVersions from "find-versions"
 import { REG_X_HEADER } from "./constants.js"
+import fetch from "node-fetch"
 
 const pExec = util.promisify(exec)
 
@@ -9,16 +10,22 @@ export const getMajorVersion = (text: string): number =>
   parseInt(findVersions(text, { loose: true })?.[0].split(".")[0] ?? "", 10)
 
 export const getLatestMajorVersion = async (name: string) => {
-  const { stdout, stderr } = await pExec(`yarn info ${name} version --json`)
+  const url = `https://registry.npmjs.org/${name}`
 
-  if (stderr) {
-    console.error(`------- ${name} -------`)
-    console.error(stderr)
+  try {
+    // console.log("fetching file from", url)
+    const response = await fetch(url)
+    const data: unknown = await response.json()
+    const latestVersion = parseInt(
+      data?.["dist-tags"]?.latest?.split(".")[0],
+      10
+    )
+
+    return { wasSuccessful: !!latestVersion, version: latestVersion }
+  } catch (error) {
+    console.error(error)
+    return null
   }
-
-  const version = getMajorVersion(JSON.parse(stdout)?.data) ?? 0
-
-  return { wasSuccessful: !!stdout, version }
 }
 
 export const isTheSameHeader = (header: string, headerCount: number) =>

@@ -12,8 +12,8 @@ export const getLatestMajorVersion = async (name: string) => {
   const { stdout, stderr } = await pExec(`yarn info ${name} version --json`)
 
   if (stderr) {
-    console.log("---------")
-    console.log("error", stderr)
+    console.error(`------- ${name} -------`)
+    console.error(stderr)
   }
 
   const version = getMajorVersion(JSON.parse(stdout)?.data) ?? 0
@@ -30,8 +30,8 @@ export const getGitHubRepoUrl = async (name: string) => {
   )
 
   if (stderr) {
-    console.log("---------")
-    console.log("error", stderr)
+    console.error(`------- ${name} -------`)
+    console.error(stderr)
   }
 
   const url = JSON.parse(stdout)?.url.split("/").slice(0, 5).join("/")

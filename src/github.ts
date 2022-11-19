@@ -2,7 +2,7 @@ import { request } from "@octokit/request"
 
 export const getRelease = async (owner: string, repo: string, tag: string) => {
   try {
-    console.log("requesting", owner, repo, tag)
+    // console.log("requesting", owner, repo, tag)
 
     const requestWithAuth = request.defaults({
       headers: {

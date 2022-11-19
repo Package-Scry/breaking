@@ -7,7 +7,7 @@ import { getHeaders } from "./utils.js"
 
 const fetchFileFromGitHub = async (url: string): Promise<string> => {
   try {
-    console.log("fetching file from", url)
+    // console.log("fetching file from", url)
     const response = await fetch(url)
     const data: string = await response.text()
 
@@ -63,9 +63,8 @@ export const getChangeLogFromFile = async (
   try {
     const changeLogString = await fetchFileFromGitHub(url)
     const headers: string[] = getHeaders(changeLogString)
-
     const majorChangeLogs = getMajorChangeLogs(changeLogString, headers)
-    console.log("--------")
+
     return majorChangeLogs
   } catch (error) {
     console.error(error)

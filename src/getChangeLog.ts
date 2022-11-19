@@ -85,7 +85,7 @@ export const getChangeLog = async (npmPackage: {
     // console.log(combinedChangeLogs)
     return combinedChangeLogs
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return null
   }
 }

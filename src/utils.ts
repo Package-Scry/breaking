@@ -35,6 +35,7 @@ export const getGitHubRepoUrl = async (name: string) => {
     const repoUrl = data?.repository?.url
       ?.replace("git+", "")
       ?.replace(".git", "")
+      ?.replace("git://", "https://")
 
     return { wasSuccessful: !!repoUrl, url: repoUrl }
   } catch (error) {
